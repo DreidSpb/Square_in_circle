@@ -20,9 +20,9 @@ void MainWindow::paintEvent(QPaintEvent *)
 {
     QPainter image;
     image.begin(this);
+    image.drawEllipse(myrect().center(), rad(myrect()), rad(myrect()));
     image.rotate(sek());
     image.drawRect(myrect());
-    image.drawEllipse(myrect().center(), rad(myrect()), rad(myrect()));
     image.end();
     update();
 }
