@@ -1,46 +1,28 @@
 #include "mainwindow.h"
-#include <QRect>
-#include <QPainter>
-#include <cmath>
 #include <QDateTime>
-#include <iostream>
-using namespace std;
+#include <QPainter>
+#include <QtMath>
 
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {}
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-{
-}
+MainWindow::~MainWindow() {}
 
-MainWindow::~MainWindow()
-{
-
-}
 void MainWindow::paintEvent(QPaintEvent *)
 {
     QPainter image;
     image.begin(this);
-    image.drawEllipse(myrect().center(), rad(myrect()), rad(myrect()));
-    image.rotate(sek());
-    image.drawRect(myrect());
+    image.translate(rect().center());
+    image.drawEllipse(QPoint(0, 0), rad, rad);
+    image.rotate(QDateTime::currentMSecsSinceEpoch() / 10 % 360);
+    image.drawRect(r);
     image.end();
     update();
 }
 
-QRect MainWindow::myrect(int leftPos, int topPos, int width, int height)
+void MainWindow::resizeEvent(QResizeEvent *)
 {
-    return QRect(leftPos, topPos, width, height);
-}
-
-int MainWindow::rad(QRect)
-{
-    return int(ceil(sqrt(pow(myrect().height(), 2)/2)));
-}
-
-int MainWindow::sek()
-{
-    QDateTime a;
-    cout << a.currentSecsSinceEpoch()% 360 << endl;
-    return int(a.currentSecsSinceEpoch() % 360);
-
+    int s = qMin(width(), height()) * 0.9;
+    rad = s / 2;
+    int sqSide = s / sqrt(2);
+    r = QRect(-sqSide / 2, -sqSide / 2, sqSide, sqSide);
 }
